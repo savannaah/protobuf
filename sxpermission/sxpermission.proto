@@ -1,0 +1,49 @@
+// Protocol Buffers - Savannaah's data interchange format for warehouse
+// Copyright 2020 Savannaah Pty. Ltd. All rights reserved
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are not permitted
+//
+// This is for internal use only
+
+syntax = "proto3";
+
+package sxpermission;
+
+message RequestHeader {
+    string token = 1;
+    string access = 2;
+}
+
+message ApplicationRequest {
+    RequestHeader header = 1;
+    string name = 2;
+}
+
+message CreateRecordRequest {
+    RequestHeader header = 1;
+    string name = 2;
+}
+
+message DataRequest {
+    RequestHeader header = 1;
+    string name = 2;
+    int32 id = 3;
+}
+
+message DashboardRequest {
+    RequestHeader header = 1;
+    string name = 2;
+}
+
+message PermissionResponse {
+    int32 statusCode = 1;
+    string message = 2;
+}
+
+service Permission {
+    rpc CheckApplication(ApplicationRequest) returns (PermissionResponse);
+    rpc CheckCreateRecord(CreateRecordRequest) returns (PermissionResponse);
+    rpc CheckSpecificDataPermission(DataRequest) returns (PermissionResponse);
+    rpc CheckDashboardPermission(DashboardRequest) returns (PermissionResponse);
+}
