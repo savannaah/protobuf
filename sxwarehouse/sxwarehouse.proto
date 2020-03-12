@@ -1,0 +1,78 @@
+// Protocol Buffers - Savannaah's data interchange format for warehouse
+// Copyright 2020 Savannaah Pty. Ltd. All rights reserved
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are not permitted
+//
+// This is for internal use only
+
+syntax = "proto3";
+
+package sxwarehouse;
+
+message RequestHeader {
+    string token = 1;
+}
+
+message RequestField {
+    string code = 1;
+    string name = 2;
+    string description = 3;
+    string addressStreet = 4;
+    string addressCity = 5;
+    string addressPostCode = 6;
+    string addressState= 7;
+    string addressCountry = 8;
+}
+
+message GetRequest {
+    RequestHeader header = 1;
+    int32 id = 2;
+}
+
+message CreateRequest {
+    RequestHeader header = 1;
+    RequestField field = 2;
+}
+
+message UpdateRequest {
+    RequestHeader header = 1;
+    RequestField field = 2;
+    int32 id = 3;
+}
+
+message ActionRequest {
+    RequestHeader header = 1;
+    int32 id = 2;
+    string name = 3;
+}
+
+message DataResponse {
+    int32 statusCode = 1;
+    string message = 2;
+    message Data {
+        string id = 1;
+        string name = 2;
+        string code = 3;
+        string description = 4;
+        string addressStreet = 5;
+        string addressCity = 6;
+        string addressPostCode = 7;
+        string addressState = 8;
+        string addressCountry = 9;
+        string createdDate = 10;
+        string createdBy = 11;
+        string lastModifiedDate = 12;
+        string lastModifiedBy = 13;
+        string recordState = 14;
+        int64 referencedBy = 15;//number of records that referenced this record
+    }
+    Data data = 3;
+}
+
+service Warehouse {
+    rpc Create(CreateRequest) returns (DataResponse);
+    rpc Get(GetRequest) returns (DataResponse);
+    rpc Update(UpdateRequest) returns (DataResponse);
+    rpc Action(ActionRequest) returns (DataResponse);
+}

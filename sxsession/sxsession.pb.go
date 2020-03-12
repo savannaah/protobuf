@@ -4,8 +4,12 @@
 package sxsession
 
 import (
+	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -203,4 +207,156 @@ var fileDescriptor_0935310516f48714 = []byte{
 	0xf1, 0x52, 0x07, 0x26, 0x12, 0xba, 0x0f, 0x9b, 0x41, 0x7a, 0x5d, 0x2e, 0x7e, 0x9a, 0xe3, 0xaf,
 	0xff, 0x6d, 0x3e, 0xa7, 0x15, 0xfd, 0xcb, 0x7c, 0x9b, 0xd6, 0xf7, 0x3d, 0xfd, 0x0c, 0x00, 0x00,
 	0xff, 0xff, 0x40, 0xc7, 0x9a, 0xf9, 0xf2, 0x01, 0x00, 0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// SessionClient is the client API for Session service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type SessionClient interface {
+	Create(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*TokenResponse, error)
+	Update(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*TokenResponse, error)
+	Delete(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*TokenResponse, error)
+}
+
+type sessionClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewSessionClient(cc *grpc.ClientConn) SessionClient {
+	return &sessionClient{cc}
+}
+
+func (c *sessionClient) Create(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*TokenResponse, error) {
+	out := new(TokenResponse)
+	err := c.cc.Invoke(ctx, "/sxsession.Session/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sessionClient) Update(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*TokenResponse, error) {
+	out := new(TokenResponse)
+	err := c.cc.Invoke(ctx, "/sxsession.Session/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sessionClient) Delete(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*TokenResponse, error) {
+	out := new(TokenResponse)
+	err := c.cc.Invoke(ctx, "/sxsession.Session/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SessionServer is the server API for Session service.
+type SessionServer interface {
+	Create(context.Context, *LoginRequest) (*TokenResponse, error)
+	Update(context.Context, *TokenRequest) (*TokenResponse, error)
+	Delete(context.Context, *TokenRequest) (*TokenResponse, error)
+}
+
+// UnimplementedSessionServer can be embedded to have forward compatible implementations.
+type UnimplementedSessionServer struct {
+}
+
+func (*UnimplementedSessionServer) Create(ctx context.Context, req *LoginRequest) (*TokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (*UnimplementedSessionServer) Update(ctx context.Context, req *TokenRequest) (*TokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (*UnimplementedSessionServer) Delete(ctx context.Context, req *TokenRequest) (*TokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+
+func RegisterSessionServer(s *grpc.Server, srv SessionServer) {
+	s.RegisterService(&_Session_serviceDesc, srv)
+}
+
+func _Session_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SessionServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sxsession.Session/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SessionServer).Create(ctx, req.(*LoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Session_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SessionServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sxsession.Session/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SessionServer).Update(ctx, req.(*TokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Session_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SessionServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sxsession.Session/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SessionServer).Delete(ctx, req.(*TokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Session_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "sxsession.Session",
+	HandlerType: (*SessionServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _Session_Create_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _Session_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Session_Delete_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "sxsession.proto",
 }
