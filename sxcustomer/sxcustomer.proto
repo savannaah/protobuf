@@ -1,0 +1,129 @@
+// Protocol Buffers - Savannaah's data interchange format for warehouse
+// Copyright 2020 Savannaah Pty. Ltd. All rights reserved
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are not permitted
+//
+// This is for internal use only
+
+syntax = "proto3";
+
+package sxcustomer;
+
+message RequestHeader {
+    string token = 1;
+}
+
+message Employee {
+    string firstName = 1;
+    string middleName = 2;
+    string lastName = 3;
+    string position = 4;
+    string contactPhone = 5;
+    string contactMobile = 6;
+}
+
+message RequestField {
+    string customerType = 1;
+    string prefix = 2;
+    string firstName = 3;
+    string middleName = 4;
+    string lastName = 5;
+    string organisationName = 6;
+    string contactEmail = 7;
+    string contactMobile = 8;
+    string contactPhone = 9;
+    string addressStreet = 10;
+    string addressCity = 11;
+    string addressPostCode = 12;
+    string addressState= 13;
+    string addressCountry = 14;
+    repeated Employee employeeDetails = 15;
+}
+
+message RawRequest {
+    RequestHeader header = 1;
+}
+
+message GetRequest {
+    RequestHeader header = 1;
+    int32 id = 2;
+}
+
+message CreateRequest {
+    RequestHeader header = 1;
+    RequestField field = 2;
+}
+
+message UpdateRequest {
+    RequestHeader header = 1;
+    int32 id = 2;
+    string action = 3;
+    RequestField field = 4;
+}
+
+message DataResponse {
+    int32 statusCode = 1;
+    string message = 2;
+    message Data {
+        string id = 1;
+        string customerType = 2;
+        string prefix = 3;
+        string firstName = 4;
+        string middleName = 5;
+        string lastName = 6;
+        string organisationName = 7;
+        string contactEmail = 8;
+        string contactMobile = 9;
+        string contactPhone = 10;
+        string addressStreet = 11;
+        string addressCity = 12;
+        string addressPostCode = 13;
+        string addressState= 14;
+        string addressCountry = 15;
+        string balanceAmount = 16;
+        repeated Employee employeeDetails = 17;
+        string createdBy = 18;
+        string createdDate = 19;
+        string lastModifiedBy = 20;
+        string lastModifiedDate = 21;
+        string recordState = 22;
+    }
+    Data data = 3;
+}
+
+message RawResponse {
+    int32 statusCode = 1;
+    string message = 2;
+    message Data {
+        repeated string customerType = 1;
+    }
+    Data data = 3;
+}
+
+message BalanceRequest {
+    RequestHeader header = 1;
+    int32 id = 2;
+    message Data {
+        double amount = 1;
+    }
+    Data data = 3;
+}
+
+message BalanceResponse {
+    int32 statusCode = 1;
+    string message = 2;
+    message Data {
+        double amount = 1;
+    }
+    Data data = 3;
+}
+
+
+service Customer {
+    rpc Raw(RawRequest) returns (RawResponse);
+    rpc Create(CreateRequest) returns (DataResponse);
+    rpc Get(GetRequest) returns (DataResponse);
+    rpc Update(UpdateRequest) returns (DataResponse);
+    rpc AdjustBalance(BalanceRequest) returns (BalanceResponse);
+}
