@@ -1,0 +1,81 @@
+// Protocol Buffers - Savannaah's data interchange format for warehouse
+// Copyright 2020 Savannaah Pty. Ltd. All rights reserved
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are not permitted
+//
+// This is for internal use only
+
+syntax = "proto3";
+
+package sxpayment;
+
+message RequestHeader {
+    string token = 1;
+}
+
+message RequestField {
+    string name = 1;
+    string description = 2;
+    bool customerPayment = 3;
+    int32 customerID = 4;
+    int32 vendorID = 5;
+    double paidAmount = 6;
+    repeated int32 transactionIDs = 7;
+    string paymentType = 8;
+}
+
+message RawRequest {
+    RequestHeader header = 1;
+}
+
+message GetRequest {
+    RequestHeader header = 1;
+    int32 id = 2;
+}
+
+message CreateRequest {
+    RequestHeader header = 1;
+    RequestField field = 2;
+}
+
+message UpdateRequest {
+    RequestHeader header = 1;
+    int32 id = 2;
+    string action = 3;
+    RequestField field = 4;
+}
+
+message RawResponse {
+    int32 statusCode = 1;
+    string message = 2;
+    message Data {
+        repeated string paymentType = 1;
+    }
+    Data data = 3;
+}
+
+message DataResponse {
+    int32 statusCode = 1;
+    string message = 2;
+    message Data {
+        string id = 1;
+        string name = 2;
+        string description = 3;
+        bool customerPayment = 4;
+        int32 customerID = 5;
+        string customer = 6;
+        int32 vendorID = 7;
+        string vendor = 8;
+        double paidAmount = 9;
+        string paymentType = 10;
+    }
+    Data data = 3;
+}
+
+service Customer {
+    rpc Raw(RawRequest) returns (RawResponse);
+    rpc Create(CreateRequest) returns (DataResponse);
+    rpc Get(GetRequest) returns (DataResponse);
+    rpc Update(UpdateRequest) returns (DataResponse);
+}
