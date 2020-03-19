@@ -88,6 +88,7 @@ message DataResponse {
         string lastModifiedBy = 20;
         string lastModifiedDate = 21;
         string recordState = 22;
+        int64 referencedBy = 23;//number of records that referenced this record
     }
     Data data = 3;
 }
