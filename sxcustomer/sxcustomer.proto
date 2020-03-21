@@ -56,11 +56,16 @@ message CreateRequest {
     RequestField field = 2;
 }
 
+message ActionRequest {
+    RequestHeader header = 1;
+    int32 id = 2;
+    string name = 3;
+}
+
 message UpdateRequest {
     RequestHeader header = 1;
     int32 id = 2;
-    string action = 3;
-    RequestField field = 4;
+    RequestField field = 3;
 }
 
 message DataResponse {
@@ -126,6 +131,7 @@ service Customer {
     rpc Raw(RawRequest) returns (RawResponse);
     rpc Create(CreateRequest) returns (DataResponse);
     rpc Get(GetRequest) returns (DataResponse);
+    rpc Action(ActionRequest) returns (DataResponse);
     rpc Update(UpdateRequest) returns (DataResponse);
     rpc AdjustBalance(BalanceRequest) returns (BalanceResponse);
 }
