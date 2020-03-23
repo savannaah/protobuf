@@ -97,7 +97,7 @@ message DataResponse {
         string addressPostCode = 13;
         string addressState= 14;
         string addressCountry = 15;
-        string balanceAmount = 16;
+        double balanceAmount = 16;
         repeated Employee employeeDetails = 17;
         string createdBy = 18;
         string createdDate = 19;
@@ -105,6 +105,7 @@ message DataResponse {
         string lastModifiedDate = 21;
         string recordState = 22;
         int64 referencedBy = 23;//number of records that referenced this record
+        string currency = 24;
     }
     Data data = 3;
 }
@@ -114,6 +115,7 @@ message RawResponse {
     string message = 2;
     message Data {
         repeated string customerType = 1;
+        string currency = 2;
     }
     Data data = 3;
 }
