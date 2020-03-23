@@ -68,6 +68,16 @@ message UpdateRequest {
     RequestField field = 3;
 }
 
+message DeleteRequest {
+    RequestHeader header = 1;
+    int32 id = 2;
+}
+
+message DeleteResponse {
+    int32 statusCode = 1;
+    string message = 2;
+}
+
 message DataResponse {
     int32 statusCode = 1;
     string message = 2;
@@ -134,4 +144,5 @@ service Customer {
     rpc Action(ActionRequest) returns (DataResponse);
     rpc Update(UpdateRequest) returns (DataResponse);
     rpc AdjustBalance(BalanceRequest) returns (BalanceResponse);
+    rpc Delete(DeleteRequest) returns (DeleteResponse);
 }
